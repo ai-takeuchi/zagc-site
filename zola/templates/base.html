@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ get_url(path='index.css') }}">
+    <link rel="icon" href="{{ get_url(path='img/favicon.svg') }}" type="image/svg+xml" />
+    <title>{{ config.title }}</title>
+</head>
+
+{# body class を生成 #}
+{% set body_plink = "" %}
+
+{% if page is defined %}
+  {% set body_plink = page.permalink %}
+{% elif section is defined %}
+  {% set body_plink = section.permalink %}
+{% endif %}
+
+{% set body_classes = [] %}
+
+{# permalink を分解して path[0] を取得 #}
+{% set plink_parts = body_plink | split(pat="/") %}
+{% set path0 = plink_parts | nth(n=3) | default(value="") %}
+{% if path0 != "" %}
+  {% set body_classes = body_classes | concat(with=["path0-" ~ path0]) %}
+{% else %}
+  {% set body_classes = body_classes | concat(with=["home"]) %}
+{% endif %}
+
+{# slug によるクラス #}
+{% if section is defined and section.slug is defined %}
+  {% set body_classes = body_classes | concat(with=["section-" ~ section.slug]) %}
+{% elif page is defined and page.slug is defined %}
+  {% set body_classes = body_classes | concat(with=["page-" ~ page.slug]) %}
+{% endif %}
+
+{# カテゴリクラスを追加（例: category-news） #}
+{% if page is defined and page.taxonomies is defined %}
+  {% for cat in page.taxonomies.categories | default(value=[]) %}
+    {% set body_classes = body_classes | concat(with=["category-" ~ cat]) %}
+  {% endfor %}
+{% endif %}
+
+{# タグクラスを追加（例: tag-web, tag-dev） #}
+{% if page is defined and page.taxonomies is defined %}
+  {% for tag in page.taxonomies.tags | default(value=[]) %}
+    {% set body_classes = body_classes | concat(with=["tag-" ~ tag]) %}
+  {% endfor %}
+{% endif %}
+
+{# レイアウト（テンプレート）クラスを追加（例: layout-page） #}
+{% if page is defined and page.template is defined %}
+  {% set body_classes = body_classes | concat(with=["layout-" ~ page.template]) %}
+{% elif section is defined and section.template is defined %}
+  {% set body_classes = body_classes | concat(with=["layout-" ~ section.template]) %}
+{% endif %}
+
+{# HTML 出力 #}
+<body class="{{ body_classes | join(sep=' ') }}">
+
+    {# モバイルメニュー本体 #}
+    <div id="menu" class="mobile-menu">
+        <a href="#" class="close-button">×</a>
+        <ul class="menu-content">
+            {% for item in config.extra.menu | sort(attribute="weight") %}
+            <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <page>
+        <header>
+            {# 共通ヘッダー #}
+            <div>
+                {# ハンバーガーメニュー #}
+                <a href="#menu" class="menu-button">☰</a>
+                <a href="{{ get_url(path='') }}" class="logo">{{ config.title }}</a>
+                {# ヘッダーメニュー #}
+                <nav>
+                    <ul>
+                        {% for item in config.extra.menu | sort(attribute="weight") %}
+                        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        {# sidebar の初期値 #}
+        {% set sidebar = "partials/sidebar-default.html" %}
+
+        {# page / section の sidebar を取得 #}
+        {% if page is defined and page.extra.sidebar is defined %}
+          {% set sidebar = page.extra.sidebar %}
+        {% elif section is defined and section.extra.sidebar is defined %}
+          {% set sidebar = section.extra.sidebar %}
+        {% endif %}
+
+        {#
+        sidebar の表示制御
+        +++
+        [extra]
+        sidebar = false // サイドバー無し
+        sidebar = "partials/sidebar-service.html" // サイドバーの指定
+        指定無し: "partials/sidebar-default.html" // デフォルトサイドバーが読み込まれる
+        +++
+        #}
+        {% if sidebar == false %}
+        <div class="content-wrapper">
+            <main>
+                {% block content %}{% endblock content %}
+            </main>
+        </div>
+        {% else %}
+        {% if sidebar == "partials/sidebar-contact.html" %}
+        <div class="content-wrapper sidebar">
+            <main>
+                {% block content %}{% endblock content %}
+            </main>
+            <aside>{% include "partials/sidebar-contact.html" %}</aside>
+        </div>
+        {% elif sidebar == "partials/sidebar-service.html" %}
+        <div class="content-wrapper sidebar">
+            <main>
+                {% block content %}{% endblock content %}
+            </main>
+            <aside>{% include "partials/sidebar-service.html" %}</aside>
+        </div>
+        {% else %}
+        <div class="content-wrapper sidebar">
+            <main>
+                {% block content %}{% endblock content %}
+            </main>
+            <aside>{% include "partials/sidebar-default.html" %}</aside>
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <footer>
+            <div>
+                {# Button goto top #}
+                <a href="#" class="back-to-top" id="backToTop">▲ Goto Top</a>
+                <p>&copy; 2025 {{ config.title }}.</p>
+            </div>
+        </footer>
+    </page>
+    <script type="text/javascript" src="{{ get_url(path='js/index.js') }}"></script>
+</body>
+
+</html>

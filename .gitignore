@@ -1,0 +1,35 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+
+# IDE / Editor configs
+.vscode/
+.idea/
+.bin/
+
+# Build artifacts and caches
+zola/public/
+zola/.sass-cache/
+zola/.cache/
+zola/tmp/
+zola/static/uploads/*
+
+# Temporary / runtime files
+data/
+
+# Secrets
+*.secret
+*.secret.*
+scripts/*.secret.*
+.env.php
+
+# ------------------------
+# .gitignore
+
+# Private documents
+documents/

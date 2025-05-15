@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ page.title }}</h1>
+<article>
+  <div>{{ page.content | safe }}</div>
+</article>
+
+<form id="inquiry-form">
+  <dl>
+    <dt>Name</dt>
+    <dd><input type="text" name="name" required></label></dd>
+    <dt>Email Address</dt>
+    <dd><input type="email" name="email" required></label></dd>
+    <dt>Inquiry Details</dt>
+    <dd><textarea name="message" required></textarea></dd>
+  </dl>
+  <button type="submit">Confirm</button>
+</form>
+
+<div id="confirm" style="display:none;">
+  <h2>Confirmation</h2>
+  <dl>
+    <dt>Name</dt><dd><span id="confirm-name"></span></dd>
+    <dt>Email</dt><dd><span id="confirm-email"></span></dd>
+    <dt>Details</dt><dd><span id="confirm-message"></span></dd>
+  </dl>
+  <button id="back">Back</button>
+  <button id="send">Send</button>
+</div>
+
+<div id="thanks" style="display:none;">
+  <h2>Submission Completed</h2>
+  <p>Thank you.</p>
+</div>
+
+<script>
+const form = document.getElementById("inquiry-form");
+const confirm = document.getElementById("confirm");
+const thanks = document.getElementById("thanks");
+
+let data = {};
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+  const formData = new FormData(form);
+  data = Object.fromEntries(formData.entries());
+
+  document.getElementById("confirm-name").textContent = data.name;
+  document.getElementById("confirm-email").textContent = data.email;
+  document.getElementById("confirm-message").textContent = data.message;
+
+  form.style.display = "none";
+  confirm.style.display = "block";
+});
+
+document.getElementById("back").addEventListener("click", () => {
+  confirm.style.display = "none";
+  form.style.display = "block";
+});
+
+document.getElementById("send").addEventListener("click", () => {
+  fetch("{{ get_url(path='api/inquiry.php') }}", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.ok ? res.json() : Promise.reject(res))
+  .then(() => {
+    confirm.style.display = "none";
+    thanks.style.display = "block";
+  })
+  .catch(err => alert("Submission failed"));
+});
+</script>
+{% endblock %}

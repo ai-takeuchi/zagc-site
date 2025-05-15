@@ -1,0 +1,32 @@
+# The URL the site will be built for
+# base_url = "http://localhost:1111"  # zola serve
+base_url = "/"  # ← 公開時は https://your-domain.com に変更
+
+title = "ZAGC Site | Powered by Cockpit CMS, GitHub Actions & Zola"
+description = "A fun and flexible JAMstack-style site powered by Cockpit CMS, GitHub Actions, and Zola."
+default_language = "en"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = true
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = false
+
+[markdown]
+# Whether to do syntax highlighting
+highlight_code = true
+# highlight_theme = "base16-ocean-dark"  # Additional theme
+
+[extra]
+# Definition Menu
+menu = [
+  { name = "Front page", url = "/", weight = 1 },
+  { name = "About", url = "/about/", weight = 2 },
+  { name = "Info", url = "/info/", weight = 3 },
+  { name = "Blog", url = "/blog/", weight = 4 },
+  { name = "Contact", url = "/inquiry/", weight = 5 },
+]
+
+# Project information
+project_name = "ZAGC"
+powered_by = "Zola + GitHub Actions + Cockpit CMS"

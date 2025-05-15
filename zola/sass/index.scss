@@ -1,0 +1,294 @@
+$primary-color: #fff;
+$header-color: #312929;
+// $footer-color: #cbeaff;
+$footer-color: #312929;
+$header-text-color: #fff;
+$footer-text-color: #fff;
+$text-color: #333;
+$page-width: 1000px;
+$sidebar-width: 300px;
+
+* {
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 2.1em;
+}
+
+h2 {
+    font-size: 1.9em;
+}
+
+h3 {
+    font-size: 1.7em;
+}
+
+h4 {
+    font-size: 1.5em;
+}
+
+h5 {
+    font-size: 1.3em;
+}
+
+h6 {
+    font-size: 1.1em;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-style: none;
+}
+
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+    /* Smooth scrolling for anchor links */
+    scroll-behavior: smooth;
+    /* "auto" is OK as it's controlled by JS */
+    // scroll-behavior: auto;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: $primary-color;
+    color: $text-color;
+    // font-size: 1.1em;
+
+    /* Smooth scrolling for anchor links */
+    scroll-behavior: smooth;
+    /* "auto" is OK as it's controlled by JS */
+    // scroll-behavior: auto;
+}
+
+page {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: $header-color;
+
+    div {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: $page-width;
+        padding: 20px 10px 10px 20px;
+
+        nav {
+            ul {
+                display: flex;
+                list-style-type: none;
+                margin: 4px 0;
+                padding: 10px 0 0 10px;
+
+                li {
+                    a {
+                        color: $header-text-color;
+                        padding: 4px 16px 4px 10px;
+                        text-decoration: none;
+                        // border-left: 0.2px solid #333;
+                        border-left: 7.2px solid #ea2e79
+                    }
+                }
+
+                li:last-child {
+                    a {
+                        // border-right: 0.2px solid #333;
+                    }
+                }
+            }
+        }
+    }
+
+    .logo {
+        display: block;
+        width: 160px;
+        height: 84px;
+        background-image: url(img/zagc-logo.svg);
+        background-repeat: no-repeat;
+        background-size: contain;
+        text-indent: -9999px;
+    }
+}
+
+.content-wrapper {
+    flex: 1;
+    margin-left: auto;
+    margin-right: auto;
+    width: $page-width;
+    max-width: 100%;
+}
+
+main {
+    padding: 20px;
+}
+
+.content-wrapper.sidebar {
+    display: flex;
+    padding: 4px 10px;
+
+    main {
+        flex: 1;
+    }
+
+    aside {
+        width: $sidebar-width;
+        background-color: #ececec;
+        padding: 10px;
+    }
+}
+
+footer {
+    background-color: $footer-color;
+    color: $footer-text-color;
+
+    div {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: $page-width;
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+}
+
+
+/* 画面幅が 768px 以下の場合に適用 */
+@media screen and (max-width: 768px) {
+    header nav {
+        display: none;
+    }
+
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+
+    aside {
+        width: 100% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/*************************
+ * Mobile Menu
+ *
+ * Using :target
+ * No JavaScript used
+ */
+
+/* Hamburger Button */
+.menu-button {
+    font-size: 2rem;
+    // padding: 1rem;
+    padding: 4px 14px;
+    display: inline-block;
+    text-decoration: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    color: gray;
+}
+
+/* Menu Overlay */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    // background: rgba(0, 0, 0, 0.8);
+    background: rgba(253, 246, 145, 0.9);
+    // color: white;
+    color: $text-color;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+
+/* Show using :target */
+#menu:target {
+    left: 0;
+}
+
+/* Menu Content */
+.menu-content {
+    // background: #333;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.menu-content a {
+    display: block;
+    // color: white;
+    color: $text-color;
+    text-decoration: none;
+    margin: 0.5rem 0;
+}
+
+.close-button {
+    font-size: 2rem;
+    display: inline-block;
+    text-decoration: none;
+    // color: white;
+    color: $text-color;
+    position: absolute;
+    //top: 1rem;
+    //right: 1rem;
+    padding: 4px 22px;
+    top: 0;
+    right: 0;
+}
+
+
+/************************
+ * Back to Top Button
+ */
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #333;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 14px;
+    /* Make it transparent initially */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    /* Hide it initially */
+    visibility: hidden;
+}
+
+.back-to-top.show {
+    /* Show */
+    visibility: visible;
+    /* Fade in */
+    opacity: 0.8;
+}
+
+.back-to-top:hover {
+    opacity: 1;
+}

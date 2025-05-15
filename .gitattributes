@@ -1,0 +1,18 @@
+# Line ending normalization
+* text=auto
+
+# Markdown and HTML files
+*.md     text eol=lf
+*.html   text eol=lf
+*.toml   text eol=lf
+*.rs     text eol=lf
+
+# Scripts and code
+*.go     text eol=lf
+*.sh     text eol=lf
+
+# Binary / vendored files — exclude from stats
+zola/static/api/* linguist-vendored
+zola/static/img/* linguist-vendored
+zola/static/js/*  linguist-vendored
+scripts/bin/*     linguist-vendored

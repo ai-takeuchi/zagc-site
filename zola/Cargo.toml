@@ -1,0 +1,9 @@
+[package]
+name = "zola-site" # Project name
+version = "0.20.0"
+authors = ["Ai Takeuchi"]
+edition = "2025"
+
+[dependencies]
+zola = { version = "0.20.0", features = ["search"] } # Zola の依存関係
+chrono = "0.4" # 追加する chrono クレート
