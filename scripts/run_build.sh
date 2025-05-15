@@ -28,8 +28,12 @@ url_join() {
 }
 
 # === Load .env.php if present ===
-echo -e "\033[1;34m[ENV] Loading .env.php file...\033[0m"
-source ./scripts/load_env_php.sh .env.php
+if [[ -f ".env.php" ]]; then
+  echo -e "\033[1;34m[ENV] Loading .env.php file...\033[0m"
+  source ./scripts/load_env_php.sh ".env.php"
+else
+  echo -e "\033[1;34m[ENV] Using GitHub Actions Secrets.\033[0m"
+fi
 
 # === Colorful Logging ===
 log() {

@@ -18,6 +18,10 @@ zola/.sass-cache/
 zola/.cache/
 zola/tmp/
 zola/static/uploads/*
+zola/content/blog/*
+!zola/content/blog/_*
+zola/content/info/*
+!zola/content/info/_*
 
 # Temporary / runtime files
 data/
