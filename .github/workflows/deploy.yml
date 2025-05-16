@@ -43,6 +43,8 @@ jobs:
       COCKPIT_ITEMS_PATH: ${{ secrets.COCKPIT_ITEMS_API_PATH }}
       COCKPIT_ASSETS_API_PATH: ${{ secrets.COCKPIT_ASSETS_API_PATH }}
 
+      DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+
       FTP_HOST: ${{ secrets.FTPS_HOST }}
       FTP_PORT: ${{ secrets.FTPS_PORT }}
       FTP_HOST_PATH: ${{ secrets.FTP_HOST_PATH }}
