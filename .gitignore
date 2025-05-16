@@ -30,10 +30,11 @@ data/
 *.secret
 *.secret.*
 scripts/*.secret.*
-.env.php
-
-# ------------------------
-# .gitignore
+.env.*
+!.env.example.php
 
 # Private documents
 documents/
+
+# ------------------------
+# .gitignore

@@ -56,13 +56,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Clean data and zola/public directories
-        if: env.CLEAN == 'true'
-        run: |
-          rm -rf data/* zola/public/*
-          find data -type d -empty -delete
-          find zola/public -type d -empty -delete
-
       - name: Install tools
         run: |
           sudo apt-get update
@@ -73,8 +66,17 @@ jobs:
         with:
           go-version: '1.21'
 
+      - name: Determine clean parameter
+        id: set_param
+        run: |
+          if [ "${{ env.CLEAN }}" == "true" ]; then
+            echo "param=--clean" >> $GITHUB_OUTPUT
+          else
+            echo "param=--no-clean" >> $GITHUB_OUTPUT
+          fi
+
       - name: Run build script
-        run: bash scripts/run_build.sh
+        run: bash scripts/run_build.sh ${{ steps.set_param.outputs.param }}
 
       # Deploy: Push to the gh-pages branch for public release
       # gh-pages must be configured in GitHub Pages settings

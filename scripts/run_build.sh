@@ -77,6 +77,25 @@ fi
 
 mkdir -p .bin data tmp zola/public
 
+# === Step: Clean if --clean is passed ===
+CLEAN=false
+for arg in "$@"; do
+  if [[ "$arg" == "--clean" ]]; then
+    CLEAN=true
+  fi
+done
+
+clean() {
+  for dir in "data" "zola/public"; do
+    log "Cleaning directory ${dir}"
+    rm -rf "${dir:?}"/*
+  done
+}
+
+if $CLEAN; then
+  clean
+fi
+
 # === Step: Fetch Items ===
 fetch_items() {
   for item in "${COCKPIT_ITEMS[@]}"; do
