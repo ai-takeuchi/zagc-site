@@ -29,9 +29,9 @@ on:
         options:
           - 'true'
           - 'false'
-  push:
-    branches:
-      - main  # write history branch
+  # push:
+  #   branches:
+  #     - main  # write history branch
 
 permissions:
   contents: write  # write history branch
