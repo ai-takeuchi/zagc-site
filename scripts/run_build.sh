@@ -109,6 +109,7 @@ fetch_items() {
     else
       url="${COCKPIT_URL}/:${COCKPIT_SPACE}/${COCKPIT_ITEMS_PATH}/${item}"
     fi
+    echo $url
     curl -sf -H "Cockpit-Token: $COCKPIT_TOKEN" "$url" -o "data/${item}.json" \
       || error_exit "Failed to fetch item: $item"
 
