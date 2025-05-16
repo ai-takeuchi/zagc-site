@@ -75,8 +75,6 @@ else
   COCKPIT_UPLOADS_URL="${COCKPIT_URL}/:${COCKPIT_SPACE}/storage/uploads"
 fi
 
-mkdir -p .bin data tmp zola/public
-
 # === Step: Clean if --clean is passed ===
 CLEAN=false
 for arg in "$@"; do
@@ -97,6 +95,11 @@ clean() {
 if $CLEAN; then
   clean
 fi
+
+# ================================================================
+
+# === Step: Initialize ===
+mkdir -p .bin data tmp zola/public
 
 # === Step: Fetch Items ===
 fetch_items() {
