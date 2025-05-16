@@ -100,17 +100,15 @@ fi
 
 # === Step: Fetch Items ===
 fetch_items() {
-  ls
-
   for item in "${COCKPIT_ITEMS[@]}"; do
     log "Fetching item: ${item}"
     if [[ -z "$COCKPIT_SPACE" ]]; then
-      url="${COCKPIT_URL}/${COCKPIT_ITEMS_PATH}/${item}"
+      url=$(url_join "${COCKPIT_URL}" "${COCKPIT_ITEMS_PATH}" "${item}")
     else
-      url="${COCKPIT_URL}/:${COCKPIT_SPACE}/${COCKPIT_ITEMS_PATH}/${item}"
+      url=$(url_join "${COCKPIT_URL}" ":${COCKPIT_SPACE}" "${COCKPIT_ITEMS_PATH}" "${item}")
     fi
-    echo $url
-    curl -sf -H "Cockpit-Token: $COCKPIT_TOKEN" "$url" -o "data/${item}.json" \
+    curl --retry 5 --retry-delay 2 --retry-max-time 30 --fail -sSL \
+      -H "Cockpit-Token: $COCKPIT_TOKEN" "$url" -o "data/${item}.json" \
       || error_exit "Failed to fetch item: $item"
 
     go run scripts/convert_to_md.go \
@@ -126,11 +124,12 @@ fetch_items() {
 fetch_assets() {
   log "Fetching assets..."
   if [[ -z "$COCKPIT_SPACE" ]]; then
-    url="${COCKPIT_URL}/${COCKPIT_ASSETS_API_PATH}"
+    url=$(url_join "${COCKPIT_URL}" "${COCKPIT_ASSETS_API_PATH}")
   else
-    url="${COCKPIT_URL}/${COCKPIT_ASSETS_API_PATH}?space=${COCKPIT_SPACE}"
+    url=$(url_join "${COCKPIT_URL}" "${COCKPIT_ASSETS_API_PATH}?space=${COCKPIT_SPACE}")
   fi
-  curl -sf -H "Cockpit-Token: ${COCKPIT_TOKEN}" "$url" -o data/assets.json \
+  curl --retry 5 --retry-delay 2 --retry-max-time 30 --fail -sSL \
+    -H "Cockpit-Token: ${COCKPIT_TOKEN}" "$url" -o data/assets.json \
     || error_exit "Failed to fetch assets"
 
   go run scripts/fetch_assets.go --baseurl="${COCKPIT_UPLOADS_URL}" \
