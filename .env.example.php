@@ -12,7 +12,7 @@
 define('COCKPIT_URL', 'https://your-cockpit-url.com');
 define('COCKPIT_TOKEN', 'your_cockpit_token_here');
 define('COCKPIT_SPACE', 'your_space_name');  // Leave empty if not used
-define('COCKPIT_ITEMS_PATH', 'api/content/items');
+define('COCKPIT_ITEMS_API_PATH', 'api/content/items');
 define('COCKPIT_ITEMS', 'info,blog');
 define('COCKPIT_ASSETS_API_PATH', 'api/public/getAssets');
 

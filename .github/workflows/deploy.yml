@@ -1,29 +1,67 @@
 name: Build and Deploy via FTPS
 
+# on:
+#   workflow_dispatch: {}
 on:
-  workflow_dispatch: {}
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select deployment environment"
+        required: true
+        default: workflow-test
+        type: choice
+        options:
+          - workflow-test
+          - production
+      DEPLOY_GH_PAGE:
+        description: "Deploy to GitHub Pages"
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      CLEAN:
+        description: "Clean data and zola/public directories before build"
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    # environment: production  # 👈 GitHub の Environments で作成済みの名前
+    environment: ${{ github.event.inputs.environment }}  # 👈 選択された環境名がここに反映
 
     env:
-      COCKPIT_URL: https://${{ secrets.COCKPIT_HOST }}
+      COCKPIT_URL: ${{ secrets.COCKPIT_URL }}
       COCKPIT_TOKEN: ${{ secrets.COCKPIT_TOKEN }}
       COCKPIT_SPACE: ${{ secrets.COCKPIT_SPACE }}
       COCKPIT_ITEMS_PATH: ${{ secrets.COCKPIT_ITEMS_API_PATH }}
       COCKPIT_ASSETS_API_PATH: ${{ secrets.COCKPIT_ASSETS_API_PATH }}
+
       FTP_HOST: ${{ secrets.FTPS_HOST }}
       FTP_PORT: ${{ secrets.FTPS_PORT }}
+      FTP_HOST_PATH: ${{ secrets.FTP_HOST_PATH }}
       FTP_USER: ${{ secrets.FTPS_USER }}
       FTP_PASSWORD: ${{ secrets.FTPS_PASSWORD }}
       FTP_REMOTE_DIR: ${{ secrets.FTPS_REMOTE_DIR }}
-      DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
+
+      DEPLOY_GH_PAGE: ${{ github.event.inputs.DEPLOY_GH_PAGE }}
+      CLEAN: ${{ github.event.inputs.CLEAN }}
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Clean data and zola/public directories
+        if: env.CLEAN == 'true'
+        run: |
+          rm -rf data/* zola/public/*
+          find data -type d -empty -delete
+          find zola/public -type d -empty -delete
 
       - name: Install tools
         run: |
@@ -41,6 +79,7 @@ jobs:
       # Deploy: Push to the gh-pages branch for public release
       # gh-pages must be configured in GitHub Pages settings
       - name: Deploy to GitHub Pages
+        if: env.DEPLOY_GH_PAGE == 'true'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
