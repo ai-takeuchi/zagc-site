@@ -100,6 +100,8 @@ fi
 
 # === Step: Fetch Items ===
 fetch_items() {
+  ls
+
   for item in "${COCKPIT_ITEMS[@]}"; do
     log "Fetching item: ${item}"
     if [[ -z "$COCKPIT_SPACE" ]]; then
