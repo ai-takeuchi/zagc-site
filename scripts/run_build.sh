@@ -107,7 +107,7 @@ fetch_items() {
     else
       url=$(url_join "${COCKPIT_URL}" ":${COCKPIT_SPACE}" "${COCKPIT_ITEMS_PATH}" "${item}")
     fi
-    curl --retry 5 --retry-delay 2 --retry-max-time 30 --fail -sSL \
+    curl --retry 5 --retry-delay 3 --retry-max-time 60 --connect-timeout 10 --fail -sSL \
       -H "Cockpit-Token: $COCKPIT_TOKEN" "$url" -o "data/${item}.json" \
       || error_exit "Failed to fetch item: $item"
 
@@ -128,7 +128,7 @@ fetch_assets() {
   else
     url=$(url_join "${COCKPIT_URL}" "${COCKPIT_ASSETS_API_PATH}?space=${COCKPIT_SPACE}")
   fi
-  curl --retry 5 --retry-delay 2 --retry-max-time 30 --fail -sSL \
+  curl --retry 5 --retry-delay 3 --retry-max-time 60 --connect-timeout 10 --fail -sSL \
     -H "Cockpit-Token: ${COCKPIT_TOKEN}" "$url" -o data/assets.json \
     || error_exit "Failed to fetch assets"
 
