@@ -98,9 +98,6 @@ fi
 
 # ================================================================
 
-# === Step: Initialize ===
-mkdir -p .bin data tmp zola/public
-
 # === Step: Fetch Items ===
 fetch_items() {
   for item in "${COCKPIT_ITEMS[@]}"; do
@@ -179,6 +176,8 @@ deploy_site() {
   fi
 }
 
+# === Step: Initialize ===
+mkdir -p .bin data tmp zola/public
 # === Run All ===
 fetch_items
 fetch_assets
