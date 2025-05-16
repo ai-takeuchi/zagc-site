@@ -29,6 +29,12 @@ on:
         options:
           - 'true'
           - 'false'
+  push:
+    branches:
+      - main  # write history branch
+
+permissions:
+  contents: write  # write history branch
 
 jobs:
   build-deploy:
@@ -93,14 +99,18 @@ jobs:
 
       # Archive: Commit the built site to the build-history branch
       - name: Commit built site to history branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Force-create a dedicated branch for build history
+
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
           git checkout -B build-history
           mkdir -p history
           mv public/* history/ 2>/dev/null || true
           git add history/
-          # Don't fail if there are no changes
           git commit -m "Build at $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
           git push origin build-history --force
