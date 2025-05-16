@@ -41,6 +41,7 @@ jobs:
       COCKPIT_TOKEN: ${{ secrets.COCKPIT_TOKEN }}
       COCKPIT_SPACE: ${{ secrets.COCKPIT_SPACE }}
       COCKPIT_ITEMS_PATH: ${{ secrets.COCKPIT_ITEMS_API_PATH }}
+      COCKPIT_ITEMS: ${{ secrets.COCKPIT_ITEMS }}
       COCKPIT_ASSETS_API_PATH: ${{ secrets.COCKPIT_ASSETS_API_PATH }}
 
       DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
