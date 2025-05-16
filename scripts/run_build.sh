@@ -87,8 +87,10 @@ done
 
 clean() {
   for dir in "data" "zola/public"; do
-    log "Cleaning directory ${dir}"
-    rm -rf "${dir:?}"/*
+    if [[ -d "${dir}" ]]; then
+      log "Cleaning directory ${dir}"
+      rm -rf "${dir:?}"/*
+    fi
   done
 }
 
