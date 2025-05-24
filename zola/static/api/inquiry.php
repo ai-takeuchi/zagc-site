@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__."../.env.php";
+require_once __DIR__."/../.env.php";
 
 // JSON 形式で受信
 header("Content-Type: application/json");
@@ -47,3 +47,4 @@ if (mail($to, $subject, $body, $headers)) {
     http_response_code(500);
     echo json_encode(["error" => "Failed to send email"]);
 }
+

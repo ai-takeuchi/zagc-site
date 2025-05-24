@@ -1,0 +1,8 @@
+# ブラウザにPHPエラーを表示しない（本番環境推奨）
+php_flag display_errors On
+
+# PHPエラーをログに記録する（本番環境推奨）
+php_flag log_errors On
+
+# エラーログのパスを指定（任意）
+php_value error_log ./.error.log

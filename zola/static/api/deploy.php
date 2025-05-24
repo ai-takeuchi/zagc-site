@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__."../.env.php";
+require_once __DIR__."/../.env.php";
 
 // 設定
 $githubToken = GITHUB_TOKEN;

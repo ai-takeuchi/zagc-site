@@ -23,7 +23,7 @@ define('DEPLOY_URL', '/'); // If the site is deployed under a subpath, include i
 // === FTP Settings (for deployment) ===
 define('FTP_HOST', 'ftp.example.com');
 define('FTP_PORT', '21');
-define('FTP_HOST_PATH', '');
+define('FTP_HOST_PATH', './zola/public/');
 define('FTP_USER', 'your_ftp_username');
 define('FTP_PASSWORD', 'your_ftp_password');
 define('FTP_REMOTE_DIR', '/htdocs/');

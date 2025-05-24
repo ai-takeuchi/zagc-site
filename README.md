@@ -96,8 +96,7 @@ github-project-repo/
 │   ├── shortcodes/        # Zola shortcodes (reusable mini-templates)
 │   ├── content/           # Markdown content (converted from Cockpit)
 │   │   ├── blog/
-│   │   ├── info/
-│   │   └── sitemap/
+│   │   └── info/
 │   ├── templates/         # Zola HTML templates
 │   │   └── partials/       # Template fragments (e.g., header, footer)
 │   ├── sass/              # SCSS (Sass) files for styling
@@ -125,11 +124,11 @@ COCKPIT_URL=http://localhost/cockpit
 COCKPIT_TOKEN=xxxxxxxx
 COCKPIT_SPACE=your-space-name (optional)
 COCKPIT_ITEMS_API_PATH=api/content/items
-COCKPIT_ITEMS=("info" "blog")
+COCKPIT_ITEMS=info,blog
 COCKPIT_ASSETS_API_PATH=api/public/getAssets
 
 # If deploying to a website that includes a path, be sure to include the path as well, e.g., https://example.com/path
-DEPLOY_URL="/"
+DEPLOY_URL=/
 
 # FTP upload settings (optional)
 FTP_HOST=ftp.example.com

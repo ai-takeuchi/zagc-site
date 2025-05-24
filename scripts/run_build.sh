@@ -1,6 +1,45 @@
 #!/bin/bash
 set -euo pipefail
 
+# === Usage ===
+show_usage() {
+  echo "Usage: $0 [--env ENV_FILE] [--clean]"
+  echo
+  echo "Options:"
+  echo "  --env ENV_FILE   Specify the environment file to load (default: .env.php)"
+  echo "  --clean          Clean generated data before building"
+  echo "  --help           Show this help message"
+  exit 0
+}
+
+# === Step: Parse Options ===
+CLEAN=false
+ENV_FILE=".env.php"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --clean)
+      CLEAN=true
+      shift
+      ;;
+    --env)
+      if ! [[ -f "${2:-}" ]]; then
+        echo -e "\033[1;31m[ERROR]\033[0m --env requires a file path argument"
+        exit 1
+      fi
+      ENV_FILE="$2"
+      shift 2
+      ;;
+    --help)
+      show_usage
+      ;;
+    *)
+      echo -e "\033[1;31m[ERROR]\033[0m Unknown option: $1"
+      show_usage
+      ;;
+  esac
+done
+
 # Utility functions
 # usage: var=$(url_join "http://example.com" "uploads" "05" "10")
 url_join() {
@@ -27,10 +66,10 @@ url_join() {
   echo "$result"
 }
 
-# === Load .env.php if present ===
-if [[ -f ".env.php" ]]; then
-  echo -e "\033[1;34m[ENV] Loading .env.php file...\033[0m"
-  source ./scripts/load_env_php.sh ".env.php"
+# === Load env file if present ===
+if [[ -f "$ENV_FILE" ]]; then
+  echo -e "\033[1;34m[ENV] Loading $ENV_FILE file...\033[0m"
+  source ./scripts/load_env_php.sh "$ENV_FILE"
 else
   echo -e "\033[1;34m[ENV] Using GitHub Actions Secrets.\033[0m"
 fi
@@ -60,7 +99,6 @@ ZOLA_COMMAND="./.bin/zola"
 COCKPIT_SPACE="${COCKPIT_SPACE:-}"
 COCKPIT_ITEMS_PATH="${COCKPIT_ITEMS_PATH:-api/content/items}"
 COCKPIT_ASSETS_API_PATH="${COCKPIT_ASSETS_API_PATH:-api/public/getAssets}"
-# DEPLOY_UPLOADS_URL="${DEPLOY_URL}/uploads"
 DEPLOY_UPLOADS_URL=$(url_join "$DEPLOY_URL" "uploads")
 # echo $(url_join "http://example.com" "uploads" "05" "10")
 # echo $(url_join "/a" "uploads" "/05/" "10")
@@ -70,18 +108,10 @@ COCKPIT_ITEMS_RAW="${COCKPIT_ITEMS}"
 IFS=',' read -ra COCKPIT_ITEMS <<< "$COCKPIT_ITEMS_RAW"
 
 if [[ -z "$COCKPIT_SPACE" ]]; then
-  COCKPIT_UPLOADS_URL="${COCKPIT_URL}/storage/uploads"
+  COCKPIT_UPLOADS_URL=$(url_join "${COCKPIT_URL}" "/storage/uploads")
 else
-  COCKPIT_UPLOADS_URL="${COCKPIT_URL}/:${COCKPIT_SPACE}/storage/uploads"
+  COCKPIT_UPLOADS_URL=$(url_join "${COCKPIT_URL}" ":${COCKPIT_SPACE}" "/storage/uploads")
 fi
-
-# === Step: Clean if --clean is passed ===
-CLEAN=false
-for arg in "$@"; do
-  if [[ "$arg" == "--clean" ]]; then
-    CLEAN=true
-  fi
-done
 
 clean() {
   for dir in "data" "zola/public"; do
@@ -162,15 +192,17 @@ build_site() {
 deploy_site() {
   if [[ -n "${FTP_HOST:-}" ]]; then
     log "Deploying via FTPS..."
+    remote_env_file=$(url_join "$FTP_REMOTE_DIR" ".env.php")
     lftp -e "
       set ftp:ssl-force true;
       set ftp:ssl-protect-data true;
       set ssl:verify-certificate no;
-      open -u $FTP_USER,$FTP_PASSWORD -p $FTP_PORT ftps://$FTP_HOST;
+      open -u "$FTP_USER","$FTP_PASSWORD" "$FTP_HOST";
       mirror -R --delete --verbose \
         --exclude-glob .env.php \
-        --exclude-glob .env.example.php \
-        ./public $FTP_REMOTE_DIR;
+        --exclude-glob .env.*.php \
+        "$FTP_HOST_PATH" "$FTP_REMOTE_DIR";
+      put "$ENV_FILE" -o "$remote_env_file";
       bye
     " || error_exit "Deployment via lftp failed"
   else
