@@ -192,7 +192,6 @@ build_site() {
 deploy_site() {
   if [[ -n "${FTP_HOST:-}" ]]; then
     log "Deploying via FTPS..."
-    remote_env_file=$(url_join "$FTP_REMOTE_DIR" ".env.php")
     lftp -e "
       set ftp:ssl-force true;
       set ftp:ssl-protect-data true;
@@ -202,9 +201,21 @@ deploy_site() {
         --exclude-glob .env.php \
         --exclude-glob .env.*.php \
         "$FTP_HOST_PATH" "$FTP_REMOTE_DIR";
-      put "$ENV_FILE" -o "$remote_env_file";
       bye
     " || error_exit "Deployment via lftp failed"
+
+    if [[ -f "$ENV_FILE" ]]; then
+      echo -e "\033[1;34m[FTPS] Put $ENV_FILE file to remote.\033[0m"
+      remote_env_file=$(url_join "$FTP_REMOTE_DIR" ".env.php")
+      lftp -e "
+        set ftp:ssl-force true;
+        set ftp:ssl-protect-data true;
+        set ssl:verify-certificate no;
+        open -u "$FTP_USER","$FTP_PASSWORD" "$FTP_HOST";
+        put "$ENV_FILE" -o "$remote_env_file";
+        bye
+      " || error_exit "Failed to put $ENV_FILE file to remote."
+    fi
   else
     warn "FTP not configured. Skipping deploy."
   fi
