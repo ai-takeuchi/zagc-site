@@ -141,6 +141,40 @@ FTP_REMOTE_DIR=/htdocs/
 
 ---
 
+## ✅ How to Obtain a GitHub Token (`GITHUB_TOKEN`)
+
+### 1. Log in to GitHub
+
+Go to [https://github.com](https://github.com) and log in to your account.
+
+---
+
+### 2. Navigate to the Token Creation Page
+
+- Click on your profile icon at the top right corner and select `Settings`.
+- In the left sidebar, select `Developer settings` → `Personal access tokens` → `Tokens (classic)`.
+- Click on **"Generate new token (classic)"**.
+
+---
+
+### 3. Configure the Token
+
+- **Note**: Provide a label or note for the token (e.g., `Deploy Trigger Token`).
+- **Expiration**: Set an expiration date (recommended: `90 days` or `No expiration`).
+- **Scopes (permissions)**: Check at least the following scopes:
+  - ✅ `repo` (to access your repository)
+  - ✅ `workflow` (to manage GitHub Actions workflows)
+
+---
+
+### 4. Save the Token
+
+The token will only be displayed once. Make sure to copy it and store it securely.
+
+Add the following to your `.env.php` file.
+
+---
+
 ## Notes and Design Principles
 
 * **Fixed version of Zola** to avoid future compatibility issues

@@ -80,8 +80,6 @@ jobs:
         run: |
           if [ "${{ env.CLEAN }}" == "true" ]; then
             echo "param=--clean" >> $GITHUB_OUTPUT
-          else
-            echo "param=--no-clean" >> $GITHUB_OUTPUT
           fi
 
       - name: Run build script
