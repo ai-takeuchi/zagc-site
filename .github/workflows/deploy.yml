@@ -52,12 +52,12 @@ jobs:
 
       DEPLOY_URL: ${{ secrets.DEPLOY_URL }}
 
-      FTP_HOST: ${{ secrets.FTPS_HOST }}
-      FTP_PORT: ${{ secrets.FTPS_PORT }}
+      FTP_HOST: ${{ secrets.FTP_HOST }}
+      FTP_PORT: ${{ secrets.FTP_PORT }}
       FTP_HOST_PATH: ${{ secrets.FTP_HOST_PATH }}
-      FTP_USER: ${{ secrets.FTPS_USER }}
-      FTP_PASSWORD: ${{ secrets.FTPS_PASSWORD }}
-      FTP_REMOTE_DIR: ${{ secrets.FTPS_REMOTE_DIR }}
+      FTP_USER: ${{ secrets.FTP_USER }}
+      FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+      FTP_REMOTE_DIR: ${{ secrets.FTP_REMOTE_DIR }}
 
       DEPLOY_GH_PAGE: ${{ github.event.inputs.DEPLOY_GH_PAGE }}
       CLEAN: ${{ github.event.inputs.CLEAN }}
