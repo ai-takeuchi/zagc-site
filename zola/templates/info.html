@@ -7,10 +7,116 @@
   {{ section.content | safe }}
 
   <ul>
-    {% for page in section.pages %}
+    {% for page in paginator.pages %}
       <li>
         <a href="{{ page.permalink }}">{{ page.title }}</a> - {{ page.date | date(format="%Y-%m-%d") }}
       </li>
     {% endfor %}
   </ul>
+
+  {# Pagination #}
+  {# {{ section.paginate_by }} / page #}
+  {% if paginator.number_pagers == 0 %}
+    <span class="nothing">-</span>
+  {% elif paginator.number_pagers == 1 %}
+    <span class="only-one-page">1 / 1</span>
+  {% else %}
+
+    {% set number_of_pagination = 8 %}
+    {% if number_of_pagination > paginator.number_pagers %}
+      {% set number_of_pagination = paginator.number_pagers %}
+    {% endif %}
+    {% set half_pagination = (number_of_pagination - number_of_pagination % 2) / 2 %}
+
+    {% set_global indexC = -1 %}
+    {% set_global pagination = [] %}
+
+    {# 前半 #}
+    {% set_global index1 = 0 %}
+    {% for page_num in range(start=1, end=half_pagination + 1) %}
+      {% set_global pagination = pagination | concat(with=[page_num]) %}
+      {% if page_num == paginator.current_index %}
+        {% set_global indexC = index1 %}
+      {% endif %}
+      {% set_global index1 = index1 + 1 %}
+    {% endfor %}
+    {# {{ pagination | json_encode }} #}
+
+    {# 後半 #}
+    {# paginator.number_pagers: {{paginator.number_pagers}} #}
+    {% set_global index2 = half_pagination %}
+    {% for page_num in range(start=paginator.number_pagers - half_pagination + 1, end=paginator.number_pagers + 1) %}
+      {% set_global pagination = pagination | concat(with=[page_num]) %}
+      {# {{page_num}} == {{ paginator.current_index }} #}
+      {% if page_num == paginator.current_index %}
+        {% set_global indexC = index2 %}
+      {% endif %}
+      {% set_global index2 = index2 + 1 %}
+    {% endfor %}
+    {# {{ pagination | json_encode }} #}
+
+    {% if indexC == -1 %}
+      {% set_global indexC = half_pagination %}
+    {% endif %}
+
+    {# #}
+    {% set_global start_page_num = paginator.current_index - 2 %}
+    {% if start_page_num < 1 %}
+      {% set_global start_page_num = 1 %}
+    {% endif %}
+
+    {% set start_center_index = indexC - 2 %}
+    {% if start_center_index < 0 %}
+      {% set start_center_index = 0 %}
+    {% endif %}
+
+    {% set end_center_index = indexC + 3 %}
+    {% if end_center_index > number_of_pagination %}
+      {% set end_center_index = number_of_pagination %}
+    {% endif %}
+
+    {# <br>start_page_num:{{start_page_num}}, indexC:{{ indexC }}, start_center_index:{{ start_center_index }}-end_center_index:{{ end_center_index }},<br> #}
+
+    {# #}
+    {% set_global pg = [] %}
+    {% for i in range(start=0, end=number_of_pagination) %}
+      {% if i >= start_center_index and i < end_center_index %}
+        {% set_global pg = pg | concat(with=[start_page_num]) %}
+        {% set_global start_page_num = start_page_num + 1 %}
+      {% else %}
+        {% set_global pg = pg | concat(with=pagination[i]) %}
+      {% endif %}
+    {% endfor %}
+    {# pg: {{ pg | json_encode }} #}
+
+    <div class="pagination">
+      {% if paginator.previous %}
+        <a class="prev" href="{{ paginator.previous }}">« Prev</a>
+      {% else %}
+        <span class="prev" href="" class="invisible">« Prev</span>
+      {% endif %}
+
+      {% set_global prev_page_num = -1 %}
+      {% for page_num in pg %}
+        {% if prev_page_num != -1 and page_num - prev_page_num > 1 %}
+          <span class="ellipsis">…</span>
+        {% endif %}
+        {% if page_num == paginator.current_index %}
+          <span class="page-num current">{{ page_num }}</span>
+        {% else %}
+          <a class="page-num" href="{{ paginator.base_url }}{{ page_num }}/">{{ page_num }}</a>
+        {% endif %}
+        {% set_global prev_page_num = page_num %}
+      {% endfor %}
+
+      {% if paginator.next %}
+        <a class="next" href="{{ paginator.next }}">Next »</a>
+      {% else %}
+        <span class="next" href="" class="invisible">Next »</span>
+      {% endif %}
+
+  {% endif %}
+  </div>
+  {# End of Pagination #}
+
 {% endblock content %}

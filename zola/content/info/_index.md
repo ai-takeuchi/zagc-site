@@ -2,6 +2,7 @@
 template = "info.html"
 title = "Information"
 sort_by = "date"
+paginate_by = 5  # <= これを追加
 +++
 新着情報の一覧ページです。
 <!--
