@@ -62,89 +62,90 @@
 
     {# モバイルメニュー本体 #}
     <div id="menu" class="mobile-menu">
-        <a href="#" class="close-button">×</a>
-        <ul class="menu-content">
-            {% for item in config.extra.menu | sort(attribute="weight") %}
-            <li><a href="{{ item.url }}">{{ item.name }}</a></li>
-            {% endfor %}
-        </ul>
+      <a href="#" class="close-button">×</a>
+      <ul class="menu-content">
+        {% for item in config.extra.menu | sort(attribute="weight") %}
+        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+        {% endfor %}
+      </ul>
     </div>
 
     <page>
-        <header>
-            {# 共通ヘッダー #}
-            <div>
-                {# ハンバーガーメニュー #}
-                <a href="#menu" class="menu-button">☰</a>
-                <a href="{{ get_url(path='') }}" class="logo">{{ config.title }}</a>
-                {# ヘッダーメニュー #}
-                <nav>
-                    <ul>
-                        {% for item in config.extra.menu | sort(attribute="weight") %}
-                        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            </div>
-        </header>
-
-        {# sidebar の初期値 #}
-        {% set sidebar = "partials/sidebar-default.html" %}
-
-        {# page / section の sidebar を取得 #}
-        {% if page is defined and page.extra.sidebar is defined %}
-          {% set sidebar = page.extra.sidebar %}
-        {% elif section is defined and section.extra.sidebar is defined %}
-          {% set sidebar = section.extra.sidebar %}
-        {% endif %}
-
-        {#
-        sidebar の表示制御
-        +++
-        [extra]
-        sidebar = false // サイドバー無し
-        sidebar = "partials/sidebar-service.html" // サイドバーの指定
-        指定無し: "partials/sidebar-default.html" // デフォルトサイドバーが読み込まれる
-        +++
-        #}
-        {% if sidebar == false %}
-        <div class="content-wrapper">
-            <main>
-                {% block content %}{% endblock content %}
-            </main>
+      <header>
+        {# 共通ヘッダー #}
+        <div>
+          {# ハンバーガーメニュー #}
+          <a href="#menu" class="menu-button">☰</a>
+          <a href="{{ get_url(path='') }}" class="logo">{{ config.title }}</a>
+          {# ヘッダーメニュー #}
+          <nav>
+            <ul>
+              {% for item in config.extra.menu | sort(attribute="weight") %}
+              <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </nav>
         </div>
-        {% else %}
-        {% if sidebar == "partials/sidebar-contact.html" %}
-        <div class="content-wrapper sidebar">
-            <main>
-                {% block content %}{% endblock content %}
-            </main>
-            <aside>{% include "partials/sidebar-contact.html" %}</aside>
-        </div>
-        {% elif sidebar == "partials/sidebar-service.html" %}
-        <div class="content-wrapper sidebar">
-            <main>
-                {% block content %}{% endblock content %}
-            </main>
-            <aside>{% include "partials/sidebar-service.html" %}</aside>
-        </div>
-        {% else %}
-        <div class="content-wrapper sidebar">
-            <main>
-                {% block content %}{% endblock content %}
-            </main>
-            <aside>{% include "partials/sidebar-default.html" %}</aside>
-        </div>
-        {% endif %}
-        {% endif %}
+      </header>
 
-        <footer>
-            <div>
-                {# Button goto top #}
-                <a href="#" class="back-to-top" id="backToTop">▲ Goto Top</a>
-                <p>&copy; 2025 {{ config.title }}.</p>
-            </div>
-        </footer>
+      {# sidebar の初期値 #}
+      {% set sidebar = "partials/sidebar-default.html" %}
+
+      {# page / section の sidebar を取得 #}
+      {% if page is defined and page.extra.sidebar is defined %}
+        {% set sidebar = page.extra.sidebar %}
+      {% elif section is defined and section.extra.sidebar is defined %}
+        {% set sidebar = section.extra.sidebar %}
+      {% endif %}
+
+      {#
+      sidebar の表示制御
+      +++
+      [extra]
+      sidebar = false // サイドバー無し
+      sidebar = "partials/sidebar-service.html" // サイドバーの指定
+      指定無し: "partials/sidebar-default.html" // デフォルトサイドバーが読み込まれる
+      +++
+      #}
+      {% include "partials/breadcrumbs.html" %}
+      {% if sidebar == false %}
+      <div class="content-wrapper">
+        <main>
+          {% block content %}{% endblock content %}
+        </main>
+      </div>
+      {% else %}
+      {% if sidebar == "partials/sidebar-contact.html" %}
+      <div class="content-wrapper sidebar">
+        <main>
+          {% block content %}{% endblock content %}
+        </main>
+        <aside>{% include "partials/sidebar-contact.html" %}</aside>
+      </div>
+      {% elif sidebar == "partials/sidebar-service.html" %}
+      <div class="content-wrapper sidebar">
+        <main>
+          {% block content %}{% endblock content %}
+        </main>
+        <aside>{% include "partials/sidebar-service.html" %}</aside>
+      </div>
+      {% else %}
+      <div class="content-wrapper sidebar">
+        <main>
+          {% block content %}{% endblock content %}
+        </main>
+        <aside>{% include "partials/sidebar-default.html" %}</aside>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <footer>
+        <div>
+          {# Button goto top #}
+          <a href="#" class="back-to-top" id="backToTop">▲ Goto Top</a>
+          <p>&copy; 2025 {{ config.title }}.</p>
+        </div>
+      </footer>
     </page>
     <script type="text/javascript" src="{{ get_url(path='js/index.js') }}"></script>
 </body>

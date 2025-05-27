@@ -110,7 +110,7 @@ header {
                 li {
                     a {
                         color: $header-text-color;
-                        padding: 4px 16px 4px 10px;
+                        padding: 4px 10px 4px 10px;
                         text-decoration: none;
                         // border-left: 0.2px solid #333;
                         border-left: 7.2px solid #ea2e79
@@ -137,6 +137,20 @@ header {
     }
 }
 
+.breadcrumbs {
+    margin-left: auto;
+    margin-right: auto;
+    width: $page-width;
+    max-width: 100%;
+    padding: 4px 5%;
+    border-bottom: 1px solid #eee;
+
+    a {
+        text-decoration: none;
+        color: $text-color;
+    }
+}
+
 .content-wrapper {
     flex: 1;
     margin-left: auto;
@@ -146,7 +160,7 @@ header {
 }
 
 main {
-    padding: 20px;
+    padding: 0 20px 20px 20px;
 }
 
 .content-wrapper.sidebar {

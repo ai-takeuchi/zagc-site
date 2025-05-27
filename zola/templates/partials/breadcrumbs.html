@@ -1,0 +1,24 @@
+{# templates/partials/breadcrumbs.html #}
+
+<nav class="breadcrumbs">
+  <a href="/">Home</a>
+
+  {% if section %}
+    &raquo; <a href="{{ section.permalink }}">{{ section.title }}</a>
+  {% endif %}
+
+  {% if page %}
+    {% if page.ancestors | length == 2 %}
+      {% set path = page.ancestors[1] %}
+      {# path value is "info/_index.md" #}
+      {# get section information from path file. #}
+      {% set sec = get_section(path=path) %}
+      &raquo; <a href="{{ sec.permalink }}">{{ sec.title }}</a>
+    {% endif %}
+    &raquo; {{ page.title }}
+  {% endif %}
+
+  {% if terms is defined %}
+    &raquo; Categories
+  {% endif %}
+</nav>
