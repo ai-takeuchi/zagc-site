@@ -198,6 +198,18 @@ Add the following to your `.env.php` file.
 
 ---
 
+## Zola Template Features
+
+* **Categories**: Organize and group your content with category support.
+* **Breadcrumbs**: Easily navigate your site’s hierarchy with breadcrumbs.
+* **Code Highlighting**: Syntax highlighting for code blocks for better readability.
+* **Prev/Next Links**: Seamlessly move to the previous or next post in the section.
+* **Sidebar**: A handy sidebar for additional navigation or widgets.
+* **Hamburger Menu**: A responsive hamburger menu for mobile-friendly navigation.
+* **Inquiry Send Mail**: Contact form functionality to send inquiries via email.
+
+---
+
 ## License
 
 MIT License

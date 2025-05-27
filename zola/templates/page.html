@@ -7,4 +7,13 @@
     <h1>{{ page.title }}</h1>
     <div>{{ page.content | safe }}</div>
   </article>
+
+  <div class="prev-next-links">
+    {% if page.lower %}
+      <a href="{{ page.lower.permalink }}">« {{ page.lower.title }}</a>
+    {% endif %}
+    {% if page.higher %}
+      <a href="{{ page.higher.permalink }}">{{ page.higher.title }} »</a>
+    {% endif %}
+  </div>
 {% endblock content %}
