@@ -2,6 +2,10 @@
 # base_url = "http://localhost:1111"  # zola serve
 base_url = "/"  # ← 公開時は https://your-domain.com に変更
 
+taxonomies = [
+  { name = "categories" },
+]
+
 title = "ZAGC Site | Powered by Cockpit CMS, GitHub Actions & Zola"
 description = "A fun and flexible JAMstack-style site powered by Cockpit CMS, GitHub Actions, and Zola."
 default_language = "en"
@@ -24,6 +28,7 @@ menu = [
   { name = "About", url = "/about/", weight = 2 },
   { name = "Info", url = "/info/", weight = 3 },
   { name = "Blog", url = "/blog/", weight = 4 },
+  { name = "Categories", url = "/categories/", weight = 5 },
   { name = "Contact", url = "/inquiry/", weight = 5 },
 ]
 

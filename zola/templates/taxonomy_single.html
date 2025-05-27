@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ term.name }} | {{ config.title }}{% endblock %}
+
+{% block content %}
+  <h1>Category: {{ term.name }}</h1>
+  <ul>
+    {% for page in term.pages %}
+      <li><a href="{{ page.permalink }}">{{ page.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

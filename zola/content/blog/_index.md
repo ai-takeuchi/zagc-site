@@ -2,6 +2,8 @@
 template = "blog.html"
 title = "Blog"
 sort_by = "date"
+render = true   # category 表示に必要
+paginate_by = 5  # <= これを追加
 +++
 ここはブログの一覧ページです。
 <!--
