@@ -14,8 +14,42 @@ $sidebar-width: 300px;
 }
 
 .pagination {
+    nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        flex-wrap: wrap; // 折返し
+    }
+
     .invisible {
         visibility: hidden;
+    }
+
+    a {
+        text-decoration: none;
+        color: $text-color;
+    }
+
+    .page-num {
+        border: 1px solid #aaa;
+        border-radius: 2px;
+    }
+
+    .current {
+        background-color: #ccc;
+        border: 1px solid #666;
+    }
+
+    a,
+    .page-num,
+    .prev,
+    .next {
+        display: inline-block;
+        padding: 2px;
+        min-width: 2em;
+        text-align: center;
+        white-space: nowrap; // 折返し禁止
     }
 }
 

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }} | {{ config.title }}{% endblock title %}
+
+{% block content %}
+  <h1>{{ section.title }}</h1>
+  {{ section.content | safe }}
+
+  <ul>
+    {% for page in paginator.pages %}
+      <li>
+        <a href="{{ page.permalink }}">{{ page.title }}</a> - {{ page.date | date(format="%Y-%m-%d") }}
+      </li>
+    {% endfor %}
+  </ul>
+
+  {# Pagination #}
+  {% set max = paginator.number_pagers %}
+  {% set current = paginator.current_index %}
+
+  {% set_global items = [1] %}
+
+  {% if current > 4 %}
+    {% set_global items = items | concat(with=["…"]) %}
+  {% endif %}
+
+  {% set r = 2 %}
+  {% set r1 = current - r %}
+  {% set r2 = current + r %}
+
+  {% if r1 > 2 %}
+    {% set s = r1 %}
+  {% else %}
+    {% set s = 2 %}
+  {% endif %}
+
+  {% if max < r2 %}
+    {% set e = max %}
+  {% else %}
+    {% set e = r2 %}
+  {% endif %}
+
+  {% for i in range(start=s, end=e + 1) %}
+    {% set_global items = items | concat(with=[i]) %}
+  {% endfor %}
+
+	{% if r2 + 1 < max %}
+    {% set_global items = items | concat(with=['…']) %}
+  {% endif %}
+
+	{% if r2 < max %}
+    {% set_global items = items | concat(with=[max]) %}
+  {% endif %}
+
+  {# {{ items | json_encode }} #}
+
+  <div class="pagination">
+    <nav>
+      {% if paginator.previous %}
+        <a class="prev" href="{{ paginator.previous }}">« Prev</a>
+      {% else %}
+        <span class="prev invisible">« Prev</span>
+      {% endif %}
+
+      {% for page_num in items %}
+        {% if page_num == "…" %}
+          <span class="ellipsis">…</span>
+        {% elif page_num == paginator.current_index %}
+          <span class="page-num current">{{ page_num }}</span>
+        {% else %}
+          <a class="page-num" href="{{ paginator.base_url }}{{ page_num }}/">{{ page_num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if paginator.next %}
+        <a class="next" href="{{ paginator.next }}">Next »</a>
+      {% else %}
+        <span class="next invisible">Next »</span>
+      {% endif %}
+    </nav>
+  </div>
+  {# End of Pagination #}
+
+{% endblock content %}

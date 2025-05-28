@@ -1,5 +1,6 @@
 +++
-template = "blog.html"
+# template = "blog.html"
+# templates/section.html が使用される
 title = "Blog"
 sort_by = "date"
 render = true   # category 表示に必要

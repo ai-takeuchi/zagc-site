@@ -1,5 +1,5 @@
 +++
-template = "info.html"
+# template = "info.html"
 title = "Information"
 sort_by = "date"
 render = true   # category 表示に必要

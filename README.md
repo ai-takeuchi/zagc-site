@@ -207,6 +207,7 @@ Add the following to your `.env.php` file.
 * **Sidebar**: A handy sidebar for additional navigation or widgets.
 * **Hamburger Menu**: A responsive hamburger menu for mobile-friendly navigation.
 * **Inquiry Send Mail**: Contact form functionality to send inquiries via email.
+* **Pagination**: Implemented based on this [pagination gist](https://gist.github.com/kottenator/9d936eb3e4e3c3e02598?permalink_comment_id=4218361#gistcomment-4218361)
 
 ---
 

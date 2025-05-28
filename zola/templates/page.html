@@ -8,6 +8,83 @@
     <div>{{ page.content | safe }}</div>
   </article>
 
+  {% if page.extra.comments %}
+    <h3>Comments:</h3>
+    <form id="comments-form">
+      <dl>
+        <dt>Name</dt>
+        <dd><input type="text" name="name" required></dd>
+        <dt>Email Address</dt>
+        <dd><input type="email" name="email" required></dd>
+        <dt>Comments</dt>
+        <dd><textarea name="message" required></textarea></dd>
+      </dl>
+      <input type="hidden" name="page-path" value="{{ page.relative_path }}" />
+      <input type="hidden" name="page-title" value="{{ page.title }}" />
+      <input type="hidden" name="page-date" value="{{ page.date }}" />
+      <button type="submit">Confirm</button>
+    </form>
+
+    <div id="comments-confirm" style="display:none;">
+      <h2>Confirmation</h2>
+      <dl>
+        <dt>Name</dt><dd><span id="confirm-name"></span></dd>
+        <dt>Email</dt><dd><span id="confirm-email"></span></dd>
+        <dt>Comments</dt><dd><span id="confirm-message"></span></dd>
+      </dl>
+      <button id="back">Back</button>
+      <button id="send">Send</button>
+    </div>
+
+    <div id="comments-thanks" style="display:none;">
+      <h2>Submission Completed</h2>
+      <p>Thank you for your comments.</p>
+    </div>
+
+    <script>
+      const form = document.getElementById("comments-form");
+      const confirm = document.getElementById("comments-confirm");
+      const thanks = document.getElementById("comments-thanks");
+
+      let data = {};
+
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        data = Object.fromEntries(formData.entries());
+
+        document.getElementById("confirm-name").textContent = data.name;
+        document.getElementById("confirm-email").textContent = data.email;
+        document.getElementById("confirm-message").textContent = data.message;
+
+        form.style.display = "none";
+        confirm.style.display = "block";
+      });
+
+      document.getElementById("back").addEventListener("click", () => {
+        confirm.style.display = "none";
+        form.style.display = "block";
+      });
+
+      document.getElementById("send").addEventListener("click", () => {
+        fetch("{{ get_url(path='api/comments.php') }}", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        })
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(() => {
+          confirm.style.display = "none";
+          thanks.style.display = "block";
+        })
+        .catch(err => alert("Submission failed"));
+      });
+    </script>
+    <noscript>
+      Please enable JavaScript to view the comments.
+    </noscript>
+  {% endif %}
+
   <div class="prev-next-links">
     {% if page.lower %}
       <a href="{{ page.lower.permalink }}">« {{ page.lower.title }}</a>
