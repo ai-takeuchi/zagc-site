@@ -179,7 +179,7 @@ header {
         margin-right: auto;
         width: $page-width;
         max-width: 100%;
-        padding: 4px 5%;
+        padding: 4px 3%;
     }
 
     a {
@@ -219,6 +219,28 @@ main {
         width: $sidebar-width;
         background-color: #ececec;
         padding: 10px;
+
+        >div {
+            border-bottom: 1px solid #888;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            margin: 0 0 0px 0;
+            background-color: #81c8f0;
+            padding: 4px 10px;
+        }
+
+        .content {
+            background-color: #fff;
+            padding: 4px 10px;
+
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+        }
     }
 }
 

@@ -1,12 +1,18 @@
-Sidebar Default
-File: templates/partials/sidebar-default.html
+<div>
+  <h4>Default sidebar</h4>
+  <div class="content">
+    content...
+  </div>
+</div>
 
 {% set categories = get_taxonomy(kind="categories") %}
 {% if categories %}
-  <h2>Categories</h2>
-  <ul>
+<div>
+  <h4>Categories</h4>
+  <ul class="content">
     {% for cat in categories.items %}
       <li><a href="{{ cat.permalink }}">{{ cat.name }}</a> ({{ cat.pages | length }})</li>
     {% endfor %}
   </ul>
+</div>
 {% endif %}
