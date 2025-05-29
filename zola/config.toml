@@ -29,7 +29,7 @@ menu = [
   { name = "Info", url = "/info/", weight = 3 },
   { name = "Blog", url = "/blog/", weight = 4 },
   { name = "Categories", url = "/categories/", weight = 5 },
-  { name = "Contact", url = "/inquiry/", weight = 5 },
+  { name = "Contact", url = "/contact/", weight = 5 },
 ]
 
 # Project information

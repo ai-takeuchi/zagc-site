@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__."/../.env.php";
 
-// JSON response
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -17,9 +16,10 @@ $input = json_decode(file_get_contents("php://input"), true);
 $name = trim($input["name"] ?? "");
 $email = trim($input["email"] ?? "");
 $message = trim($input["message"] ?? "");
-$pagePath = trim($input["page-path"] ?? "");
 $pageTitle = trim($input["page-title"] ?? "");
+$pagePath = trim($input["page-path"] ?? "");
 $pageDate = trim($input["page-date"] ?? "");
+$datetime = date("Y-m-d H:i:s");
 
 if (!$name || !$email || !$message || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);
@@ -27,29 +27,35 @@ if (!$name || !$email || !$message || !filter_var($email, FILTER_VALIDATE_EMAIL)
     exit;
 }
 
-// メールの内容
-$to = MAILTO;  // 受信先を自分のメールに変更
-$subject = "Comments from: {$name}";
-// $pageDate = trim($input["page-date"] ?? "");
-$datetime = date("Y-m-d H:i:s"); // 現在日時
+// Cockpit API に送信
+$url = COCKPIT_URL."/api/collections/save/comments";
+$apiKey = COCKPIT_API_KEY;
 
-$body = <<<EOT
-page-title: {$input["page-title"]}
-page-path: {$input["page-path"]}
-page-date: {$pageDate}
-Datetime: {$datetime}
-Name: {$name}
-Email: {$email}
-Comments:
-{$message}
-EOT;
+$data = [
+    "data" => [
+        "name" => $name,
+        "email" => $email,
+        "message" => $message,
+        "page_title" => $pageTitle,
+        "page_path" => $pagePath,
+        "page_date" => $pageDate,
+        "datetime" => $datetime
+    ]
+];
 
-$headers = "From: {$email}\r\n";
+$options = [
+    "http" => [
+        "method"  => "POST",
+        "header"  => "Content-Type: application/json\r\nCockpit-Token: {$apiKey}\r\n",
+        "content" => json_encode($data)
+    ]
+];
+$context  = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
 
-// メール送信
-if (mail($to, $subject, $body, $headers)) {
+if ($result) {
     echo json_encode(["status" => "ok"]);
 } else {
     http_response_code(500);
-    echo json_encode(["error" => "Failed to send email"]);
+    echo json_encode(["error" => "Failed to save comment"]);
 }

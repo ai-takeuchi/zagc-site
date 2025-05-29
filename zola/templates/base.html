@@ -88,6 +88,18 @@
         </div>
       </header>
 
+      {% include "partials/breadcrumbs.html" %}
+
+      {#
+        sidebar の表示制御
+        +++
+        [extra]
+        指定無し: "partials/sidebar-default.html" // デフォルトサイドバーが読み込まれる
+        sidebar = false // サイドバー無し
+        sidebar = "partials/sidebar-service.html" // サイドバーの指定
+        +++
+      #}
+
       {# sidebar の初期値 #}
       {% set sidebar = "partials/sidebar-default.html" %}
 
@@ -98,45 +110,41 @@
         {% set sidebar = section.extra.sidebar %}
       {% endif %}
 
-      {#
-      sidebar の表示制御
-      +++
-      [extra]
-      sidebar = false // サイドバー無し
-      sidebar = "partials/sidebar-service.html" // サイドバーの指定
-      指定無し: "partials/sidebar-default.html" // デフォルトサイドバーが読み込まれる
-      +++
-      #}
-      {% include "partials/breadcrumbs.html" %}
       {% if sidebar == false %}
-      <div class="content-wrapper">
-        <main>
-          {% block content %}{% endblock content %}
-        </main>
-      </div>
-      {% else %}
-      {% if sidebar == "partials/sidebar-contact.html" %}
-      <div class="content-wrapper sidebar">
-        <main>
-          {% block content %}{% endblock content %}
-        </main>
-        <aside>{% include "partials/sidebar-contact.html" %}</aside>
-      </div>
+        <div class="content-wrapper">
+          <main>
+            {% block content %}{% endblock content %}
+          </main>
+        </div>
+      {% elif terms is defined %}
+          {# Categories page #}
+          <div class="content-wrapper sidebar">
+            <main>
+              {% block content %}{% endblock content %}
+            </main>
+            <aside>{% include "partials/sidebar-service.html" %}</aside>
+          </div>
+      {% elif sidebar == "partials/sidebar-contact.html" %}
+        <div class="content-wrapper sidebar">
+          <main>
+            {% block content %}{% endblock content %}
+          </main>
+          <aside>{% include "partials/sidebar-contact.html" %}</aside>
+        </div>
       {% elif sidebar == "partials/sidebar-service.html" %}
-      <div class="content-wrapper sidebar">
-        <main>
-          {% block content %}{% endblock content %}
-        </main>
-        <aside>{% include "partials/sidebar-service.html" %}</aside>
-      </div>
+        <div class="content-wrapper sidebar">
+          <main>
+            {% block content %}{% endblock content %}
+          </main>
+          <aside>{% include "partials/sidebar-service.html" %}</aside>
+        </div>
       {% else %}
-      <div class="content-wrapper sidebar">
-        <main>
-          {% block content %}{% endblock content %}
-        </main>
-        <aside>{% include "partials/sidebar-default.html" %}</aside>
-      </div>
-      {% endif %}
+        <div class="content-wrapper sidebar">
+          <main>
+            {% block content %}{% endblock content %}
+          </main>
+          <aside>{% include "partials/sidebar-default.html" %}</aside>
+        </div>
       {% endif %}
 
       <footer>

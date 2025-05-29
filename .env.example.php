@@ -36,5 +36,5 @@ define('WORKFLOW_FILE', 'deploy.yml');
 define('BRANCH_NAME', 'main');
 
 // Web Contents
-// Inquiry page API recipient
+// Contact page API recipient
 define('MAILTO', '');

@@ -5,13 +5,13 @@
   <div>{{ page.content | safe }}</div>
 </article>
 
-<form id="inquiry-form">
+<form id="contact-form">
   <dl>
     <dt>Name</dt>
     <dd><input type="text" name="name" required></dd>
     <dt>Email Address</dt>
     <dd><input type="email" name="email" required></dd>
-    <dt>Inquiry Details</dt>
+    <dt>Contact Details</dt>
     <dd><textarea name="message" required></textarea></dd>
   </dl>
   <button type="submit">Confirm</button>
@@ -34,7 +34,7 @@
 </div>
 
 <script>
-const form = document.getElementById("inquiry-form");
+const form = document.getElementById("contact-form");
 const confirm = document.getElementById("confirm");
 const thanks = document.getElementById("thanks");
 
@@ -59,7 +59,7 @@ document.getElementById("back").addEventListener("click", () => {
 });
 
 document.getElementById("send").addEventListener("click", () => {
-  fetch("{{ get_url(path='api/inquiry.php') }}", {
+  fetch("{{ get_url(path='api/contact.php') }}", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
