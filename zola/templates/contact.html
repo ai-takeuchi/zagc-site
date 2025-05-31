@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
+{%- extends "base.html" -%}
+{%- block content -%}
 <h1>{{ page.title }}</h1>
 <article>
   <div>{{ page.content | safe }}</div>
@@ -72,4 +72,4 @@ document.getElementById("send").addEventListener("click", () => {
   .catch(err => alert("Submission failed"));
 });
 </script>
-{% endblock %}
+{%- endblock -%}

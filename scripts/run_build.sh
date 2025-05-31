@@ -146,6 +146,7 @@ fetch_items() {
       --output="zola/content/${item}" \
       --upload-url="${COCKPIT_UPLOADS_URL}" \
       --deploy-upload-url="${DEPLOY_UPLOADS_URL}" \
+      --remove-missing-dirs \
       || error_exit "Markdown conversion failed for $item"
   done
 }

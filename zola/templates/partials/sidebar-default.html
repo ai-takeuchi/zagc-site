@@ -5,8 +5,12 @@
   </div>
 </div>
 
-{% set categories = get_taxonomy(kind="categories") %}
-{% if categories %}
+<div>
+{%- include "partials/search.html" -%}
+</div>
+
+{%- set categories = get_taxonomy(kind="categories") -%}
+{%- if categories -%}
 <div>
   <h4>Categories</h4>
   <ul class="content">
@@ -15,4 +19,4 @@
     {% endfor %}
   </ul>
 </div>
-{% endif %}
+{%- endif -%}

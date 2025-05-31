@@ -19,15 +19,15 @@ type Item struct {
 }
 
 func main() {
-	// コマンドライン引数（flags）
+	// コマンドライン引数
 	inputPath := flag.String("input", "", "Input JSON file path")
 	outputDir := flag.String("output", "", "Output directory for markdown files")
 	uploadURL := flag.String("upload-url", "", "Original upload URL prefix")
 	deployUploadURL := flag.String("deploy-upload-url", "", "Deployed URL prefix (used in markdown)")
+	removeMissingDirs := flag.Bool("remove-missing-dirs", false, "Remove directories in output that are missing in JSON")
 
 	flag.Parse()
 
-	// 引数のバリデーション
 	if *inputPath == "" || *outputDir == "" || *uploadURL == "" || *deployUploadURL == "" {
 		fmt.Fprintln(os.Stderr, "Error: All flags -input, -output, -upload-url, -deploy-upload-url are required.")
 		flag.Usage()
@@ -40,6 +40,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	// 以前の状態を読み込む
 	prevPath := filepath.Join(filepath.Dir(*inputPath), "prev_"+filepath.Base(*inputPath))
 	var previousItems map[string]Item
 	if _, err := os.Stat(prevPath); err == nil {
@@ -48,9 +49,10 @@ func main() {
 		previousItems = map[string]Item{}
 	}
 
+	// 出力ディレクトリ作成
 	os.MkdirAll(*outputDir, 0755)
 
-	// 削除されたファイルをローカルから削除
+	// 以前存在したが、今回存在しない記事のファイルを削除
 	for id := range previousItems {
 		if _, ok := currentItems[id]; !ok {
 			localPath := filepath.Join(*outputDir, id+".md")
@@ -59,7 +61,7 @@ func main() {
 		}
 	}
 
-	// 新規または更新されたコンテンツ
+	// Markdown ファイルを生成・更新
 	for _, item := range currentItems {
 		prevItem, _ := previousItems[item.ID]
 		if prevItem.Modified == item.Modified {
@@ -79,6 +81,35 @@ date = %s
 			fmt.Fprintf(os.Stderr, "Failed to write markdown file %s: %v\n", filename, err)
 			os.Exit(1)
 		}
+		fmt.Printf("[WRITE] %s\n", filename)
+	}
+
+	// 追加: json に無い記事のディレクトリ削除
+	if *removeMissingDirs {
+		err := filepath.WalkDir(*outputDir, func(path string, d os.DirEntry, err error) error {
+			if err != nil {
+				// エラーが発生している場合、WalkDir をスキップ
+				return filepath.SkipDir
+			}
+			// 出力ディレクトリそのものはスキップ
+			if !d.IsDir() || path == *outputDir {
+				return nil
+			}
+			dirID := filepath.Base(path)
+			if _, ok := currentItems[dirID]; !ok {
+				fmt.Printf("[DEL-DIR] %s\n", path)
+				// 削除後は SkipDir を返す
+				if err := os.RemoveAll(path); err != nil {
+					fmt.Fprintf(os.Stderr, "Failed to remove %s: %v\n", path, err)
+				}
+				return filepath.SkipDir
+			}
+			return nil
+		})
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to remove missing directories: %v\n", err)
+			os.Exit(1)
+		}
 	}
 
 	// 現在状態を保存
@@ -93,12 +124,10 @@ func loadItems(path string) (map[string]Item, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	var list []Item
 	if err := json.Unmarshal(data, &list); err != nil {
 		return nil, err
 	}
-
 	items := make(map[string]Item)
 	for _, a := range list {
 		items[a.ID] = a
@@ -120,7 +149,6 @@ func replaceImageExtToWebPIfMatch(url, uploadURL, deployUploadURL string) string
 		return url
 	}
 	url = strings.Replace(url, uploadURL, deployUploadURL, 1)
-
 	extRe := regexp.MustCompile(`(?i)\.(jpg|jpeg|png)$`)
 	return extRe.ReplaceAllString(url, ".webp")
 }

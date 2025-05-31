@@ -1,0 +1,11 @@
+<script>
+(async function () {
+  try {
+    const res = await fetch('/api/csrf_token.php');
+    const text = await res.text();
+    console.log('Raw response text:', text);
+  } catch (err) {
+    console.error('Failed to get CSRF token:', err);
+  }
+})();
+</script>

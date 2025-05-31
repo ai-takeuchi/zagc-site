@@ -1,6 +1,11 @@
 # The URL the site will be built for
 # base_url = "http://localhost:1111"  # zola serve
 base_url = "/"  # ← 公開時は https://your-domain.com に変更
+# base_url = "http://localhost:1000"
+
+# For overriding the default output directory `public`, set it to another value (e.g.: "docs")
+# output_dir = "public"
+#output_dir = "/home/hoge/public_html/1000"
 
 taxonomies = [
   { name = "categories" },
@@ -22,6 +27,9 @@ highlight_code = true
 # highlight_theme = "base16-ocean-dark"  # Additional theme
 
 [extra]
+
+keywords = "ZAGC, zola-theme"
+
 # Definition Menu
 menu = [
   { name = "Front page", url = "/", weight = 1 },

@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{%- extends "base.html" -%}
 
-{% block title %}{{ section.title }} | {{ config.title }}{% endblock title %}
+{%- block title -%}{{ section.title }} | {{ config.title }}{%- endblock title -%}
 
-{% block content %}
+{%- block content -%}
   <h1>{{ section.title }}</h1>
   {{ section.content | safe }}
 
@@ -15,42 +15,42 @@
   </ul>
 
   {# Pagination #}
-  {% set max = paginator.number_pagers %}
-  {% set current = paginator.current_index %}
+  {%- set max = paginator.number_pagers -%}
+  {%- set current = paginator.current_index -%}
 
-  {% set_global items = [1] %}
+  {%- set_global items = [1] -%}
 
-  {% if current > 4 %}
-    {% set_global items = items | concat(with=["…"]) %}
-  {% endif %}
+  {%- if current > 4 -%}
+    {%- set_global items = items | concat(with=["…"]) -%}
+  {%- endif -%}
 
-  {% set r = 2 %}
-  {% set r1 = current - r %}
-  {% set r2 = current + r %}
+  {%- set r = 2 -%}
+  {%- set r1 = current - r -%}
+  {%- set r2 = current + r -%}
 
-  {% if r1 > 2 %}
-    {% set s = r1 %}
-  {% else %}
-    {% set s = 2 %}
-  {% endif %}
+  {%- if r1 > 2 -%}
+    {%- set s = r1 -%}
+  {%- else -%}
+    {%- set s = 2 -%}
+  {%- endif -%}
 
-  {% if max < r2 %}
-    {% set e = max %}
-  {% else %}
-    {% set e = r2 %}
-  {% endif %}
+  {%- if max < r2 -%}
+    {%- set e = max -%}
+  {%- else -%}
+    {%- set e = r2 -%}
+  {%- endif -%}
 
-  {% for i in range(start=s, end=e + 1) %}
-    {% set_global items = items | concat(with=[i]) %}
-  {% endfor %}
+  {%- for i in range(start=s, end=e + 1) -%}
+    {%- set_global items = items | concat(with=[i]) -%}
+  {%- endfor -%}
 
-	{% if r2 + 1 < max %}
-    {% set_global items = items | concat(with=['…']) %}
-  {% endif %}
+	{%- if r2 + 1 < max -%}
+    {%- set_global items = items | concat(with=['…']) -%}
+  {%- endif -%}
 
-	{% if r2 < max %}
-    {% set_global items = items | concat(with=[max]) %}
-  {% endif %}
+	{%- if r2 < max -%}
+    {%- set_global items = items | concat(with=[max]) -%}
+  {%- endif -%}
 
   {# {{ items | json_encode }} #}
 
@@ -62,7 +62,7 @@
         <span class="prev invisible">« Prev</span>
       {% endif %}
 
-      {% for page_num in items %}
+      {%- for page_num in items -%}
         {% if page_num == "…" %}
           <span class="ellipsis">…</span>
         {% elif page_num == paginator.current_index %}
@@ -70,7 +70,7 @@
         {% else %}
           <a class="page-num" href="{{ paginator.base_url }}{{ page_num }}/">{{ page_num }}</a>
         {% endif %}
-      {% endfor %}
+      {%- endfor -%}
 
       {% if paginator.next %}
         <a class="next" href="{{ paginator.next }}">Next »</a>
@@ -81,4 +81,4 @@
   </div>
   {# End of Pagination #}
 
-{% endblock content %}
+{%- endblock content -%}

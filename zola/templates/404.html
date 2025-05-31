@@ -1,14 +1,8 @@
-{% extends "base.html" %}
+{%- extends "base.html" -%}
 
-{% block content %}
+{%- block content -%}
   <h1>お探しのページは見つかりませんでした。</h1>
   <p>申し訳ありませんが、指定された URL のページは存在しません。</p>
-
-  <h1>404 - ページが見つかりません</h1>
-<p>ページが存在しないか削除された可能性があります。</p>
-<p><a href="/sitemap/">サイトマップ</a>をご覧ください。</p>
-
-
-
-
-{% endblock content %}
+  <p>ページが存在しないか削除された可能性があります。</p>
+  <p><a href="/sitemap/">サイトマップ</a>をご覧ください。</p>
+{%- endblock content -%}

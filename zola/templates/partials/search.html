@@ -1,0 +1,20 @@
+<form class="search" onsubmit="return searchGoogle()" target="_blank">
+  <input type="text" id="query" placeholder="Enter keywords">
+  <button type="submit">Search by Google</button>
+</form>
+
+<script>
+  function searchGoogle() {
+    const userInput = document.getElementById("query").value.trim();
+    if (!userInput) return false;
+
+    // 現在のドメイン名を取得
+    const currentDomain = window.location.hostname;
+
+    const site = `site:${currentDomain}`;
+    const query = encodeURIComponent(`${site} ${userInput}`);
+    const url = `https://www.google.com/search?q=${query}`;
+    window.open(url, "_blank");
+    return false;
+  }
+</script>
